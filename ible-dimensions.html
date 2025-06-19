@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bible Dimensions</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Roboto -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Custom font classes for Roboto */
+      .font-roboto-thin {
+        font-family: "Roboto", sans-serif;
+        font-weight: 100;
+      }
+      .font-roboto-light {
+        font-family: "Roboto", sans-serif;
+        font-weight: 300;
+      }
+      .font-roboto-regular {
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+      }
+      .font-roboto-medium {
+        font-family: "Roboto", sans-serif;
+        font-weight: 500;
+      }
+      .font-roboto-bold {
+        font-family: "Roboto", sans-serif;
+        font-weight: 700;
+      }
+      .font-roboto-black {
+        font-family: "Roboto", sans-serif;
+        font-weight: 900;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        font-weight: 300; /* Default body text to light */
+      }
+      h1,
+      h2 {
+        font-family: "Roboto", sans-serif;
+        font-weight: 700; /* Headings can be bold for emphasis */
+      }
+      h3 {
+        font-family: "Roboto", sans-serif;
+        font-weight: 400; /* Subheadings regular weight */
+      }
+      strong {
+        font-weight: 500; /* Slightly bolder for strong text using Roboto Medium */
+      }
+
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f0f0f0; /* Lighter track */
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #a0a0a0; /* More subdued thumb */
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #707070; /* Darker on hover */
+      }
+      .rounded-xl {
+        border-radius: 0.75rem;
+      }
+      .rounded-lg {
+        border-radius: 0.5rem;
+      }
+      .rounded-md {
+        border-radius: 0.375rem;
+      }
+
+      /* Custom styling for select dropdown arrow */
+      /* Ensure appearance-none is always applied to remove native arrow */
+      select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: none; /* Explicitly remove any default/inherited background image */
+        background-repeat: no-repeat;
+        background-position: right 0.5rem center;
+        background-size: 1.5rem;
+        padding-right: 2rem; /* Add more padding to prevent text overlapping arrow */
+      }
+      /* For IE10+ */
+      select::-ms-expand {
+        display: none;
+      }
+
+      /* Explicitly style option elements within selects for better theme contrast */
+      /* This is crucial for fixing contrast issues in dark mode on some browsers */
+      .theme-light select option {
+        background-color: #ffffff; /* White */
+        color: #1f2937; /* Dark Gray */
+      }
+      .theme-sepia select option {
+        background-color: #fae4c7; /* Creamier background */
+        color: #5a4a3a; /* Darker Brown */
+      }
+      .theme-dark select option {
+        background-color: #1f2937; /* Very dark gray for options */
+        color: #f9fafb; /* Off-white for option text */
+      }
+    </style>
+  </head>
+  <body class="min-h-screen p-4 sm:p-8 flex flex-col items-center">
+    <!-- Main Application Container -->
+    <div
+      id="app-container"
+      class="w-full max-w-4xl rounded-xl shadow-lg p-6 sm:p-8 mb-8 border"
+    >
+      <!-- Header Section -->
+      <div
+        id="app-header"
+        class="flex flex-col sm:flex-row justify-between items-center mb-6 border-b-2 pb-4 relative"
+      >
+        <!-- Language and Theme Toggles (left-aligned) -->
+        <div
+          id="settings-toggles"
+          class="flex flex-col items-center sm:items-start space-y-1 mb-4 sm:mb-0"
+        >
+          <!-- Language Toggle -->
+          <div class="flex space-x-1">
+            <button
+              id="lang-en"
+              type="button"
+              class="px-2 py-1 text-xs rounded-md font-semibold transition-colors duration-200"
+            ></button>
+            <button
+              id="lang-es"
+              type="button"
+              class="px-2 py-1 text-xs rounded-md font-semibold transition-colors duration-200"
+            ></button>
+          </div>
+          <!-- Theme Toggle -->
+          <div class="flex space-x-1">
+            <button
+              id="theme-light"
+              type="button"
+              class="px-2 py-1 text-xs rounded-md font-semibold transition-colors duration-200"
+            ></button>
+            <button
+              id="theme-sepia"
+              type="button"
+              class="px-2 py-1 text-xs rounded-md font-semibold transition-colors duration-200"
+            ></button>
+            <button
+              id="theme-dark"
+              type="button"
+              class="px-2 py-1 text-xs rounded-md font-semibold transition-colors duration-200"
+            ></button>
+          </div>
+        </div>
+
+        <!-- Main Title (centered) -->
+        <h1
+          id="app-title"
+          class="text-3xl sm:text-4xl font-roboto-bold text-center leading-tight sm:absolute sm:left-1/2 sm:-translate-x-1/2"
+        ></h1>
+
+        <!-- Settings FAB - hidden in vanilla JS, but kept for visual continuity in layout -->
+        <div class="w-12 h-12 hidden sm:block"></div>
+      </div>
+
+      <!-- Version Selection -->
+      <div
+        id="version-selection-area"
+        class="mb-6 p-4 rounded-lg border flex flex-col items-center"
+      >
+        <label
+          id="label-select-version"
+          for="bible-version-select"
+          class="block text-lg font-semibold mb-2 text-center"
+        ></label>
+        <select
+          id="bible-version-select"
+          class="block w-full max-w-xs px-4 py-2 border rounded-md shadow-sm focus:ring-blue-700 focus:border-blue-700 text-base text-center pr-8 appearance-none"
+        ></select>
+      </div>
+
+      <!-- Verse Input Form -->
+      <form id="verse-input-form" class="space-y-6">
+        <div id="verse-inputs-container" class="space-y-6">
+          <!-- Verse input rows will be appended here by JavaScript -->
+        </div>
+
+        <div class="flex justify-between items-center gap-4 flex-wrap">
+          <button
+            id="add-verse-input"
+            type="button"
+            class="flex items-center px-4 py-2 rounded-md transition ease-in-out duration-150"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 mr-2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span id="text-add-more-verses"></span>
+          </button>
+          <button
+            id="generate-document"
+            type="submit"
+            class="flex items-center px-6 py-2 rounded-md transition ease-in-out duration-150 font-semibold"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 mr-2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M3 3a1 1 0 011-1h12a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V3zm2 2h10v2H5V5zm0 4h10v2H5V9zm0 4h10v2H5v-2z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span id="text-generate-document"></span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Error Message Area -->
+      <div
+        id="error-message"
+        class="hidden px-4 py-3 rounded-md relative text-sm"
+        role="alert"
+      ></div>
+
+      <!-- Fetched Verses Output Area -->
+      <div id="output-area" class="mt-8 pt-8 border-t-2 hidden">
+        <!-- Hidden by default -->
+        <h2
+          id="output-title"
+          class="text-2xl sm:text-3xl font-roboto-bold mb-4 text-center"
+        ></h2>
+        <div
+          id="verse-content"
+          class="border rounded-lg p-6 sm:p-8 shadow-inner max-h-96 overflow-y-auto text-lg leading-relaxed custom-scrollbar"
+          style="white-space: pre-wrap"
+        >
+          <!-- Verses will be displayed here -->
+        </div>
+        <button
+          id="copy-to-clipboard"
+          class="mt-6 w-full flex items-center justify-center px-6 py-3 rounded-md transition ease-in-out duration-150 font-semibold shadow-md"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 mr-2"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+            <path
+              d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"
+            />
+          </svg>
+          <span id="text-copy-to-clipboard"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Generic Notification Modal -->
+    <div
+      id="notification-modal-overlay"
+      class="fixed inset-0 bg-gray-800 bg-opacity-60 flex items-center justify-center z-50 p-4 hidden"
+    >
+      <div
+        id="notification-modal-content"
+        class="relative p-6 rounded-lg shadow-xl max-w-sm w-full border-t-4"
+      >
+        <h3 id="notification-modal-title" class="text-lg font-bold mb-4"></h3>
+        <p id="notification-modal-message" class="mb-6"></p>
+        <button
+          id="notification-modal-close"
+          class="w-full py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-150"
+        ></button>
+      </div>
+    </div>
+
+    <script>
+      const translations = {
+        en: {
+          appTitle: "Bible Dimensions",
+          selectVersion: "Select Bible Version:",
+          selectLanguage: "Select Language:",
+          english: "English",
+          spanish: "Español",
+          selectTheme: "Select Theme:",
+          lightTheme: "Light",
+          sepiaTheme: "Sepia",
+          darkTheme: "Dark",
+          book: "Book",
+          selectBook: "Select a Book",
+          startChapter: "Start Chapter",
+          selectChapter: "Select Chapter",
+          startVerse: "Start Verse",
+          selectVerse: "Select Verse",
+          endChapter: "End Chapter (Optional)",
+          endVerse: "End Verse (Optional)",
+          addMoreVerses: "Add More Verses",
+          generateDocument: "Generate Document",
+          yourVerses: "Your Verses",
+          copyToClipboard: "Copy Verses to Clipboard",
+          notification: "Notification",
+          close: "Close",
+          settings: "Settings",
+          errorBookRequired: "Book name is required.",
+          errorBookNotFound: (book) =>
+            `Book "${book}" not found in the selected version.`,
+          errorStartChapterRequired: "Start Chapter is required.",
+          errorStartChapterRange: (chapter, max) =>
+            `Start Chapter must be between 1 and ${max}.`,
+          errorChapterNotFound: (chapter, book) =>
+            `Chapter ${chapter} not found in ${book}.`,
+          errorStartVerseRequired: "Start Verse is required.",
+          errorStartVerseRange: (verse, max, book, chapter) =>
+            `Start Verse must be between 1 and ${max} for ${book} Chapter ${chapter}.`,
+          errorEndChapterRange: (chapter, max, book) =>
+            `End Chapter must be between 1 and ${max} for ${book}.`,
+          errorEndChapterLessThanStart:
+            "End Chapter cannot be less than Start Chapter.",
+          errorEndVerseRange: (verse, max, book, chapter) =>
+            `End Verse must be between 1 and ${max} for ${book} Chapter ${chapter}.`,
+          errorEndVerseLessThanStart:
+            "End Verse cannot be less than Start Verse within the same chapter.",
+          contentCopied: "Content copied to clipboard!",
+          copyFailed: "Failed to copy. Please try again manually.",
+        },
+        es: {
+          appTitle: "Bible Dimensions en Español",
+          selectVersion: "Seleccionar Versión de la Biblia:",
+          selectLanguage: "Seleccionar Idioma:",
+          english: "English",
+          spanish: "Español",
+          selectTheme: "Seleccionar Tema:",
+          lightTheme: "Claro",
+          sepiaTheme: "Sepia",
+          darkTheme: "Oscuro",
+          book: "Libro",
+          selectBook: "Seleccionar un Libro",
+          startChapter: "Capítulo de Inicio",
+          selectChapter: "Seleccionar Capítulo",
+          startVerse: "Versículo de Inicio",
+          selectVerse: "Seleccionar Versículo",
+          endChapter: "Capítulo Final (Opcional)",
+          endVerse: "Versículo Final (Opcional)",
+          addMoreVerses: "Añadir Más Versículos",
+          generateDocument: "Generar Documento",
+          yourVerses: "Tus Versículos",
+          copyToClipboard: "Copiar Versículos al Portapapeles",
+          notification: "Notificación",
+          close: "Cerrar",
+          settings: "Ajustes",
+          errorBookRequired: "El nombre del libro es obligatorio.",
+          errorBookNotFound: (book) =>
+            `Libro "${book}" no encontrado en la versión seleccionada.`,
+          errorStartChapterRequired: "El Capítulo de Inicio es obligatorio.",
+          errorStartChapterRange: (chapter, max) =>
+            `El Capítulo de Inicio debe estar entre 1 y ${max}.`,
+          errorChapterNotFound: (chapter, book) =>
+            `Capítulo ${chapter} no encontrado en ${book}.`,
+          errorStartVerseRequired: "El Versículo de Inicio es obligatorio.",
+          errorStartVerseRange: (verse, max, book, chapter) =>
+            `El Versículo de Inicio debe estar entre 1 y ${max} para ${book} Capítulo ${chapter}.`,
+          errorEndChapterRange: (chapter, max, book) =>
+            `El Capítulo Final debe estar entre 1 y ${max} para ${book}.`,
+          errorEndChapterLessThanStart:
+            "El Capítulo Final no puede ser menor que el Capítulo de Inicio.",
+          errorEndVerseRange: (verse, max, book, chapter) =>
+            `El Versículo Final debe estar entre 1 y ${max} para ${book} Capítulo ${chapter}.`,
+          errorEndVerseLessThanStart:
+            "El Versículo Final no puede ser menor que el Versículo de Inicio dentro del mismo capítulo.",
+          contentCopied: "¡Contenido copiado al portapapeles!",
+          copyFailed: "No se pudo copiar. Inténtelo de nuevo manualmente.",
+        },
+      };
+
+      // --- Bible Data Configuration ---
+      const allBibleVersions = {
+        "Reina Valera 1960": {
+          language: "es",
+          basePath: "data/rv1960/", // Path to the version's data directory
+          // bibleData, bookChapterCounts, allBooks will be populated dynamically
+        },
+        "King James Version": {
+          language: "en",
+          basePath: "data/kjv/", // Path to the version's data directory
+          // bibleData, bookChapterCounts, allBooks will be populated dynamically
+        },
+      };
+
+      const themeClasses = {
+        light: {
+          bgMain: "bg-gray-100",
+          bgCard: "bg-white",
+          textMain: "text-gray-800",
+          textHeading: "text-gray-900",
+          borderMain: "border-gray-200",
+          borderSecondary: "border-gray-300",
+          bgControl: "bg-gray-50",
+          textControl: "text-gray-700",
+          bgButtonPrimary: "bg-blue-800",
+          hoverButtonPrimary: "hover:bg-blue-900",
+          ringButtonPrimary: "focus:ring-blue-700",
+          bgButtonSecondary: "bg-gray-700",
+          hoverButtonSecondary: "hover:bg-gray-800",
+          ringButtonSecondary: "focus:ring-gray-600",
+          bgButtonGreen: "bg-green-800",
+          hoverButtonGreen: "hover:bg-green-900",
+          ringButtonGreen: "focus:ring-green-700",
+          bgButtonRed: "bg-red-700",
+          hoverButtonRed: "hover:bg-red-800",
+          ringButtonRed: "focus:ring-red-700",
+          textStrong: "text-blue-800",
+          bgActiveToggle: "bg-blue-800 text-white",
+          bgInactiveToggle: "bg-gray-200 text-gray-700 hover:bg-gray-300",
+          bgError: "bg-red-100 border-red-400 text-red-700",
+          textInput: "text-gray-800",
+          dropdownArrowColor: "%234B5563", // Gray-700 equivalent for SVG
+        },
+        sepia: {
+          bgMain: "bg-[#FDF3E6]", // Very light cream
+          bgCard: "bg-[#FCF1E0]", // Slightly deeper cream for cards
+          textMain: "text-[#5A4A3A]", // Dark brown text
+          textHeading: "text-[#4A3B2F]", // Even darker brown for headings
+          borderMain: "border-[#D1B89C]", // Medium brown border
+          borderSecondary: "border-[#C2AA90]", // Slightly darker brown for secondary border
+          bgControl: "bg-[#FAE4C7]", // Creamier control background
+          textControl: "text-[#6F5B46]", // Brownish text for controls
+          bgButtonPrimary: "bg-[#8B6E50]", // Medium brown for primary buttons
+          hoverButtonPrimary: "hover:bg-[#7A5F43]",
+          ringButtonPrimary: "focus:ring-[#8B6E50]",
+          bgButtonSecondary: "bg-[#A8876D]", // Lighter brown for secondary buttons
+          hoverButtonSecondary: "hover:bg-[#977B5C]",
+          ringButtonSecondary: "focus:ring-[#A8876D]",
+          bgButtonGreen: "bg-[#6D9F71]", // Muted green for sepia
+          hoverButtonGreen: "hover:bg-[#5E8A63]",
+          ringButtonGreen: "focus:ring-[#6D9F71]",
+          bgButtonRed: "bg-[#C26B6B]", // Muted red for sepia
+          hoverButtonRed: "hover:bg-[#B05C5C]",
+          ringButtonRed: "focus:ring-[#C26B6B]",
+          textStrong: "text-[#4A3B2F]", // Stronger dark brown for bold text
+          bgActiveToggle: "bg-[#4A3B2F] text-white", // Darker brown for active sepia toggle
+          bgInactiveToggle: "bg-[#F0D5AC] text-[#5A4A3A] hover:bg-[#E0C6A0]", // Clearer inactive sepia toggle
+          bgError: "bg-[#F2D7D5] border-[#E8A69E] text-[#B05C5C]", // Error in sepia red
+          textInput: "text-[#5A4A3A]", // Input text matches general text color
+          dropdownArrowColor: "%236F5B46", // Brownish color for SVG arrow
+        },
+        dark: {
+          bgMain: "bg-gray-900",
+          bgCard: "bg-gray-900", // Darker background for cards/dropdowns
+          textMain: "text-gray-50", // Very light text for general content (almost white)
+          textHeading: "text-gray-50",
+          borderMain: "border-gray-700",
+          borderSecondary: "border-gray-600",
+          bgControl: "bg-gray-800", // Darker background for control areas (buttons etc)
+          textControl: "text-gray-100", // Light text for control labels
+          bgButtonPrimary: "bg-blue-600",
+          hoverButtonPrimary: "hover:bg-blue-700",
+          ringButtonPrimary: "focus:ring-blue-500",
+          bgButtonSecondary: "bg-gray-600",
+          hoverButtonSecondary: "hover:bg-gray-700",
+          ringButtonSecondary: "focus:ring-gray-500",
+          bgButtonGreen: "bg-green-600",
+          hoverButtonGreen: "hover:bg-green-700",
+          ringButtonGreen: "focus:ring-green-500",
+          bgButtonRed: "bg-red-600",
+          hoverButtonRed: "hover:bg-red-700",
+          ringButtonRed: "focus:ring-red-500",
+          textStrong: "text-blue-400",
+          bgActiveToggle: "bg-blue-600 text-white",
+          bgInactiveToggle: "bg-gray-700 text-gray-200 hover:bg-gray-600", // Adjusted for better inactive contrast
+          bgError: "bg-red-900 border-red-700 text-red-100",
+          textInput: "text-gray-50", // Very light text for input fields themselves
+          dropdownArrowColor: "%23F9FAFB", // White for SVG arrow in dark mode (gray-50)
+        },
+      };
+
+      // --- Application State ---
+      const appState = {
+        selectedLanguage: "en",
+        selectedVersion: "King James Version",
+        theme: "light",
+        verseInputs: [
+          {
+            id: 1,
+            book: "",
+            startChapter: "",
+            startVerse: "",
+            endChapter: "",
+            endVerse: "",
+          },
+        ],
+        errorMessage: "",
+        fetchedVerses: [],
+        isNotificationModalOpen: false,
+        notificationModalMessage: "",
+        // New state properties for dynamically loaded data
+        currentBibleData: null,
+        currentBookChapterCounts: {},
+        currentAllBooks: [],
+        isLoadingData: false,
+      };
+
+      // --- DOM Elements Cache ---
+      const DOMElements = {};
+
+      // --- Helper Functions ---
+      function getTranslations() {
+        return translations[appState.selectedLanguage];
+      }
+
+      function getCurrentThemeClasses() {
+        return themeClasses[appState.theme];
+      }
+
+      function showNotificationModal(message) {
+        appState.notificationModalMessage = message;
+        appState.isNotificationModalOpen = true;
+        renderNotificationModal();
+      }
+
+      function closeNotificationModal() {
+        appState.isNotificationModalOpen = false;
+        appState.notificationModalMessage = "";
+        renderNotificationModal();
+      }
+
+      function getVerses(ref) {
+        if (!appState.currentBibleData) return [];
+        const bookData = appState.currentBibleData[ref.book];
+        if (!bookData) {
+          console.warn(
+            `Book data for "${ref.book}" not found in currentBibleData.`
+          );
+          return [];
+        }
+
+        const verses = [];
+        const sChap = parseInt(ref.startChapter);
+        const sVerse = parseInt(ref.startVerse);
+        const eChap = ref.endChapter ? parseInt(ref.endChapter) : sChap;
+        const eVerse = ref.endVerse ? parseInt(ref.endVerse) : sVerse;
+
+        for (let chapNum = sChap; chapNum <= eChap; chapNum++) {
+          const chapterData = bookData.chapters.find(
+            (c) => parseInt(c.chapter) === chapNum
+          );
+          if (chapterData) {
+            const currentChapterVerses = chapterData.verses;
+            const startIdx = chapNum === sChap ? sVerse - 1 : 0;
+            const endIdx =
+              chapNum === eChap ? eVerse - 1 : currentChapterVerses.length - 1;
+
+            for (let i = startIdx; i <= endIdx; i++) {
+              if (currentChapterVerses[i]) {
+                verses.push({
+                  book: ref.book,
+                  chapter: chapNum,
+                  verse: currentChapterVerses[i].verse,
+                  text: currentChapterVerses[i].text,
+                });
+              }
+            }
+          }
+        }
+        return verses;
+      }
+
+      function groupConsecutiveVerses(verses) {
+        if (verses.length === 0) return [];
+
+        const grouped = [];
+        let currentGroup = {
+          book: verses[0].book,
+          chapter: verses[0].chapter,
+          startVerse: verses[0].verse,
+          endVerse: verses[0].verse,
+          texts: [verses[0].text],
+        };
+
+        for (let i = 1; i < verses.length; i++) {
+          const currentVerse = verses[i];
+          const prevVerse = verses[i - 1];
+
+          if (
+            currentVerse.book === prevVerse.book &&
+            currentVerse.chapter === prevVerse.chapter &&
+            currentVerse.verse === prevVerse.verse + 1
+          ) {
+            currentGroup.endVerse = currentVerse.verse;
+            currentGroup.texts.push(currentVerse.text);
+          } else {
+            grouped.push(currentGroup);
+            currentGroup = {
+              book: currentVerse.book,
+              chapter: currentVerse.chapter,
+              startVerse: currentVerse.verse,
+              endVerse: currentVerse.verse,
+              texts: [currentVerse.text],
+            };
+          }
+        }
+        grouped.push(currentGroup);
+        return grouped;
+      }
+
+      function validateVerseInput(verseRef) {
+        const t = getTranslations();
+        const { book, startChapter, startVerse, endChapter, endVerse } =
+          verseRef;
+
+        if (!book.trim()) return t.errorBookRequired;
+        if (appState.isLoadingData)
+          return "Bible data is currently loading. Please wait.";
+        if (!appState.currentBibleData || !appState.currentBibleData[book]) {
+          return t.errorBookNotFound(book);
+        }
+        const bookData = appState.currentBibleData[book];
+
+        if (!startChapter.trim()) return t.errorStartChapterRequired;
+        const sChap = parseInt(startChapter);
+        const totalChaptersInBook =
+          appState.currentBookChapterCounts[book] || 0;
+        if (isNaN(sChap) || sChap <= 0 || sChap > totalChaptersInBook) {
+          return t.errorStartChapterRange(startChapter, totalChaptersInBook); // Show original input in error
+        }
+
+        const startChapterData = bookData.chapters.find(
+          (c) => parseInt(c.chapter) === sChap
+        );
+        if (!startChapterData) return t.errorChapterNotFound(sChap, book);
+
+        if (!startVerse.trim()) return t.errorStartVerseRequired;
+        const sVerse = parseInt(startVerse);
+        const totalVersesInStartChapter = startChapterData.verses.length;
+        if (
+          isNaN(sVerse) ||
+          sVerse <= 0 ||
+          sVerse > totalVersesInStartChapter
+        ) {
+          return t.errorStartVerseRange(
+            sVerse,
+            totalVersesInStartChapter,
+            book,
+            sChap
+          );
+        }
+
+        if (endChapter.trim() !== "") {
+          const eChap = parseInt(endChapter);
+          // totalChaptersInBook already fetched
+          if (isNaN(eChap) || eChap <= 0 || eChap > totalChaptersInBook) {
+            return t.errorEndChapterRange(eChap, totalChaptersInBook, book);
+          }
+          if (eChap < sChap) return t.errorEndChapterLessThanStart;
+        }
+
+        if (endVerse.trim() !== "") {
+          const eVerse = parseInt(endVerse);
+          const effectiveEndChapter =
+            endChapter.trim() !== "" ? parseInt(endChapter) : sChap;
+          const endChapterData = bookData.chapters.find(
+            (c) => parseInt(c.chapter) === effectiveEndChapter
+          );
+          if (!endChapterData)
+            return t.errorChapterNotFound(effectiveEndChapter, book);
+
+          const totalVersesInEndChapter = endChapterData.verses.length;
+          if (
+            isNaN(eVerse) ||
+            eVerse <= 0 ||
+            eVerse > totalVersesInEndChapter
+          ) {
+            return t.errorEndVerseRange(
+              eVerse,
+              totalVersesInEndChapter,
+              book,
+              effectiveEndChapter
+            );
+          }
+
+          if (effectiveEndChapter === sChap && eVerse < sVerse) {
+            return t.errorEndVerseLessThanStart;
+          }
+        }
+        return "";
+      }
+
+      // --- Data Loading ---
+      async function loadBibleVersionData(versionName) {
+        if (!allBibleVersions[versionName]) {
+          console.error(
+            `Configuration for version "${versionName}" not found.`
+          );
+          showNotificationModal(
+            `Configuration for version "${versionName}" not found.`
+          );
+          appState.isLoadingData = false;
+          renderAll();
+          return false;
+        }
+
+        const versionConfig = allBibleVersions[versionName];
+        appState.isLoadingData = true;
+        // Clear previous version's data immediately
+        appState.currentBibleData = null;
+        appState.currentBookChapterCounts = {};
+        appState.currentAllBooks = [];
+        renderAll(); // Show loading state (e.g., disable inputs)
+
+        try {
+          // Helper function to normalize book names for filenames
+          const normalizeBookNameToFilename = (
+            bookName,
+            currentVersionName
+          ) => {
+            if (!bookName) return "";
+            let normalizedName = bookName;
+
+            // Apply different normalization based on the version
+            if (currentVersionName === "Reina Valera 1960") {
+              // Replace spaces with underscores and remove diacriticals for RV1960
+              normalizedName = normalizedName.replace(/\s+/g, "_");
+              normalizedName = normalizedName
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
+            } else if (currentVersionName === "King James Version") {
+              // Remove spaces for KJV
+              normalizedName = normalizedName.replace(/\s+/g, "");
+            }
+            // Add other versions if needed
+
+            return normalizedName;
+          };
+
+          // 1. Fetch the list of books for this version
+          const booksListResponse = await fetch(
+            `${versionConfig.basePath}books.json`
+          );
+          if (!booksListResponse.ok) {
+            throw new Error(
+              `HTTP error! status: ${booksListResponse.status} while fetching books.json for ${versionName}`
+            );
+          }
+          const bookNames = await booksListResponse.json();
+          appState.currentAllBooks = bookNames; // Use the order as provided in books.json
+
+          if (
+            !appState.currentAllBooks ||
+            appState.currentAllBooks.length === 0
+          ) {
+            throw new Error(
+              `No books listed in books.json for ${versionName}.`
+            );
+          }
+
+          // 2. Fetch data for each book concurrently
+          const bookDataPromises = appState.currentAllBooks.map(
+            async (bookName) => {
+              // Pass versionName to the normalization function
+              const fileNameOnDisk = normalizeBookNameToFilename(
+                bookName,
+                versionName
+              );
+              const bookFileUrl = `${
+                versionConfig.basePath
+              }${encodeURIComponent(fileNameOnDisk)}.json`;
+              const bookResponse = await fetch(bookFileUrl);
+              if (!bookResponse.ok) {
+                console.warn(
+                  `Could not load ${bookFileUrl} (derived from book name "${bookName}") for ${versionName}. Status: ${bookResponse.status}`
+                );
+                return { bookName, data: null, error: true }; // Mark as error
+              }
+              const data = await bookResponse.json();
+              return { bookName, data, error: false };
+            }
+          );
+
+          const bookDataResults = await Promise.all(bookDataPromises);
+
+          // 3. Aggregate the data
+          const loadedBibleData = {};
+          const loadedBookChapterCounts = {};
+          let booksSuccessfullyLoadedCount = 0;
+
+          for (const result of bookDataResults) {
+            if (result.error || !result.data) {
+              console.error(
+                `Failed to load or parse data for book: ${result.bookName} in version ${versionName}`
+              );
+              // Continue to allow partial loading, but this book will be missing.
+              continue;
+            }
+            loadedBibleData[result.bookName] = result.data; // result.data is the content of {bookName}.json
+            loadedBookChapterCounts[result.bookName] = result.data.chapters
+              ? result.data.chapters.length
+              : 0;
+            booksSuccessfullyLoadedCount++;
+          }
+
+          if (
+            booksSuccessfullyLoadedCount === 0 &&
+            appState.currentAllBooks.length > 0
+          ) {
+            throw new Error(
+              `No book data could be successfully loaded for ${versionName}, though books were listed.`
+            );
+          }
+          if (booksSuccessfullyLoadedCount < appState.currentAllBooks.length) {
+            showNotificationModal(
+              `Warning: Some book data for ${versionName} could not be loaded. Functionality may be limited.`
+            );
+          }
+
+          appState.currentBibleData = loadedBibleData;
+          appState.currentBookChapterCounts = loadedBookChapterCounts;
+          // appState.currentAllBooks is already set from books.json
+
+          appState.selectedLanguage = versionConfig.language; // Set language based on loaded version
+          appState.isLoadingData = false;
+          return true; // Indicate success
+        } catch (error) {
+          console.error(`Error loading Bible data for ${versionName}:`, error);
+          showNotificationModal(
+            `Error loading Bible data for ${versionName}. ${error.message}. Check console for details.`
+          );
+          appState.currentBibleData = null;
+          appState.currentBookChapterCounts = {};
+          appState.currentAllBooks = []; // Clear books list on major error
+          appState.isLoadingData = false;
+          return false; // Indicate failure
+        } finally {
+          renderAll(); // Ensure UI updates after loading attempt (success or failure)
+        }
+      }
+
+      // --- Render Functions ---
+
+      function applyThemeClasses() {
+        const theme = getCurrentThemeClasses();
+        const appContainer = DOMElements.appContainer;
+        const body = document.body;
+
+        // Apply body classes
+        body.className = `min-h-screen p-4 sm:p-8 flex flex-col items-center font-roboto-light ${theme.bgMain} ${theme.textMain}`;
+
+        // Apply app container classes
+        appContainer.className = `w-full max-w-4xl rounded-xl shadow-lg p-6 sm:p-8 mb-8 border ${theme.bgCard} ${theme.borderMain}`;
+
+        // Apply header classes
+        DOMElements.appHeader.className = `flex flex-col sm:flex-row justify-between items-center mb-6 border-b-2 pb-4 ${theme.borderSecondary} relative`;
+        DOMElements.appTitle.className = `text-3xl sm:text-4xl font-roboto-bold text-center leading-tight sm:absolute sm:left-1/2 sm:-translate-x-1/2`;
+
+        // Apply theme to version selection area and its select dropdown
+        DOMElements.versionSelectionArea.className = `mb-6 p-4 rounded-lg border flex flex-col items-center ${theme.bgControl} ${theme.borderMain}`;
+        const bibleVersionSelect = DOMElements.bibleVersionSelect;
+        if (bibleVersionSelect) {
+          // Preserves existing structural/utility classes from HTML and adds/overrides theme-specific ones.
+          // Base classes: "block w-full max-w-xs px-4 py-2 border rounded-md shadow-sm focus:ring-blue-700 focus:border-blue-700 text-base text-center pr-8 appearance-none"
+          // Theme classes for bg, text, and border color are applied here.
+          bibleVersionSelect.className = `block w-full max-w-xs px-4 py-2 border rounded-md shadow-sm focus:ring-blue-700 focus:border-blue-700 text-base text-center pr-8 appearance-none ${theme.bgCard} ${theme.textInput} ${theme.borderSecondary}`;
+        }
+
+        // Apply theme to buttons
+        // Note: The hover/focus/ring classes are part of the theme object and applied directly.
+        DOMElements.addButton.className = `flex items-center px-4 py-2 rounded-md transition ease-in-out duration-150 ${theme.bgButtonGreen} text-white`;
+        DOMElements.generateButton.className = `flex items-center px-6 py-2 rounded-md transition ease-in-out duration-150 font-semibold ${theme.bgButtonPrimary} text-white`;
+        DOMElements.copyButton.className = `mt-6 w-full flex items-center justify-center px-6 py-3 rounded-md transition ease-in-out duration-150 font-semibold shadow-md ${theme.bgButtonSecondary} text-white`;
+
+        // Apply theme to specific elements within the form rows
+        document.querySelectorAll(".verse-input-row").forEach((row) => {
+          row.className = `grid grid-cols-1 sm:grid-cols-6 gap-4 items-end p-4 rounded-lg shadow-sm border ${theme.bgControl} ${theme.borderMain} verse-input-row`; // Ensure verse-input-row class persists
+          row.querySelectorAll("label").forEach((label) => {
+            label.className = `block text-sm font-medium ${theme.textControl} mb-1`;
+          });
+          row.querySelectorAll("select, input").forEach((inputEl) => {
+            // Preserves existing structural/utility classes from dynamic generation and adds/overrides theme-specific ones.
+            // Base classes: "block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-700 focus:border-blue-700 sm:text-sm appearance-none"
+            // Theme classes for bg, text, and border color are applied here.
+            inputEl.className = `block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-700 focus:border-blue-700 sm:text-sm ${theme.textInput} ${theme.bgCard} ${theme.borderSecondary} appearance-none`;
+          });
+          row.querySelectorAll(".remove-button").forEach((btn) => {
+            btn.className = `ml-2 p-2 rounded-md transition ease-in-out duration-150 flex-shrink-0 remove-button ${theme.bgButtonRed} text-white`;
+          });
+        });
+
+        // Apply theme to all select dropdowns' custom arrow regardless of where they are
+        // This ensures both version select and dynamically added selects have the correct arrow
+        document.querySelectorAll("select").forEach((select) => {
+          select.style.backgroundImage = `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3e%3cpath d='M7 8L10 12L13 8' stroke='${theme.dropdownArrowColor}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e")`;
+          select.classList.remove("theme-light", "theme-sepia", "theme-dark"); // Clear old theme for options
+          // Add class for specific option styling
+          select.classList.add(`theme-${appState.theme}`);
+        });
+
+        // Apply theme to error message
+        const errorMessageDiv = DOMElements.errorMessage;
+        errorMessageDiv.className = `px-4 py-3 rounded-md relative text-sm ${
+          theme.bgError
+        } ${appState.errorMessage ? "" : "hidden"}`;
+
+        // Apply theme to output area
+        DOMElements.outputArea.className = `mt-8 pt-8 border-t-2 ${
+          theme.borderSecondary
+        } ${appState.fetchedVerses.length > 0 ? "" : "hidden"}`; // Hide initially
+        DOMElements.outputTitle.className = `text-2xl sm:text-3xl font-roboto-bold mb-4 text-center ${
+          theme.textHeading
+        } ${appState.isLoadingData ? "opacity-50" : ""}`;
+        DOMElements.verseContent.className = `border rounded-lg p-6 sm:p-8 shadow-inner max-h-96 overflow-y-auto text-lg leading-relaxed custom-scrollbar ${theme.bgCard} ${theme.borderSecondary} ${theme.textMain}`;
+        document.querySelectorAll("#verse-content strong").forEach((strong) => {
+          strong.className = theme.textStrong;
+        });
+      }
+
+      function renderAppTitleAndToggles() {
+        const t = getTranslations();
+        DOMElements.appTitle.textContent = t.appTitle;
+
+        // Language Buttons
+        DOMElements.langEnButton.textContent = t.english;
+        DOMElements.langEsButton.textContent = t.spanish;
+
+        // Theme Buttons
+        DOMElements.themeLightButton.textContent = t.lightTheme;
+        DOMElements.themeSepiaButton.textContent = t.sepiaTheme;
+        DOMElements.themeDarkButton.textContent = t.darkTheme;
+
+        // Other UI texts
+        DOMElements.labelSelectVersion.textContent = t.selectVersion;
+        DOMElements.addButtonText.textContent = t.addMoreVerses;
+        DOMElements.generateButtonText.textContent = t.generateDocument;
+        DOMElements.copyButtonText.textContent = t.copyToClipboard;
+
+        // Update active states for language buttons
+        const theme = getCurrentThemeClasses();
+        DOMElements.langEnButton.className = `px-2 py-1 text-xs rounded-md font-semibold transition-colors duration-200 ${
+          appState.selectedLanguage === "en"
+            ? theme.bgActiveToggle
+            : theme.bgInactiveToggle
+        }`;
+        DOMElements.langEsButton.className = `px-2 py-1 text-xs rounded-md font-semibold transition-colors duration-200 ${
+          appState.selectedLanguage === "es"
+            ? theme.bgActiveToggle
+            : theme.bgInactiveToggle
+        }`;
+
+        // Update active states for theme buttons
+        DOMElements.themeLightButton.className = `px-2 py-1 text-xs rounded-md font-semibold transition-colors duration-200 ${
+          appState.theme === "light"
+            ? theme.bgActiveToggle
+            : theme.bgInactiveToggle
+        }`;
+        DOMElements.themeSepiaButton.className = `px-2 py-1 text-xs rounded-md font-semibold transition-colors duration-200 ${
+          appState.theme === "sepia"
+            ? theme.bgActiveToggle
+            : theme.bgInactiveToggle
+        }`;
+        DOMElements.themeDarkButton.className = `px-2 py-1 text-xs rounded-md font-semibold transition-colors duration-200 ${
+          appState.theme === "dark"
+            ? theme.bgActiveToggle
+            : theme.bgInactiveToggle
+        }`;
+
+        applyThemeClasses(); // Reapply theme classes after text updates
+      }
+
+      function renderVersionSelect() {
+        const selectElement = DOMElements.bibleVersionSelect;
+        selectElement.innerHTML = ""; // Clear existing options
+
+        Object.keys(allBibleVersions).forEach((versionName) => {
+          const option = document.createElement("option");
+          option.value = versionName;
+          option.textContent = versionName;
+          selectElement.appendChild(option);
+        });
+        selectElement.value = appState.selectedVersion; // Set selected value
+
+        // Apply dynamic arrow color and ensure appearance-none
+        applyThemeClasses(); // This already covers the select element styling
+      }
+
+      function renderVerseInputRows() {
+        const container = DOMElements.verseInputsContainer;
+        container.innerHTML = ""; // Clear existing rows
+
+        appState.verseInputs.forEach((input) => {
+          const row = document.createElement("div");
+          // Use a class to identify these rows for easier re-styling
+          row.className = `grid grid-cols-1 sm:grid-cols-6 gap-4 items-end p-4 rounded-lg shadow-sm border verse-input-row`;
+
+          const t = getTranslations();
+          const theme = getCurrentThemeClasses();
+          const bookSelected = input.book.trim() !== "";
+
+          const chaptersInBook =
+            bookSelected &&
+            appState.currentBookChapterCounts &&
+            appState.currentBookChapterCounts[input.book]
+              ? Array.from(
+                  { length: appState.currentBookChapterCounts[input.book] },
+                  (_, i) => i + 1
+                )
+              : [];
+
+          const startChapterSelected = input.startChapter.trim() !== "";
+          const currentBookData = appState.currentBibleData
+            ? appState.currentBibleData[input.book]
+            : null;
+          const startChapterData =
+            currentBookData &&
+            currentBookData.chapters &&
+            input.startChapter.trim()
+              ? currentBookData.chapters.find(
+                  (c) => parseInt(c.chapter) === parseInt(input.startChapter)
+                )
+              : null;
+          const versesInStartChapter =
+            bookSelected &&
+            startChapterSelected &&
+            startChapterData &&
+            startChapterData.verses
+              ? Array.from(
+                  { length: startChapterData.verses.length },
+                  (_, i) => i + 1
+                )
+              : [];
+
+          const endChapterSelected =
+            input.endChapter && input.endChapter.trim() !== "";
+          const effectiveEndChapterForVerses = endChapterSelected
+            ? parseInt(input.endChapter)
+            : startChapterSelected
+            ? parseInt(input.startChapter)
+            : null;
+          const endChapterData =
+            currentBookData &&
+            currentBookData.chapters &&
+            effectiveEndChapterForVerses !== null &&
+            !isNaN(effectiveEndChapterForVerses)
+              ? currentBookData.chapters.find(
+                  (c) => parseInt(c.chapter) === effectiveEndChapterForVerses
+                )
+              : null;
+          const versesInEndChapter =
+            bookSelected &&
+            effectiveEndChapterForVerses &&
+            endChapterData &&
+            endChapterData.verses
+              ? Array.from(
+                  { length: endChapterData.verses.length },
+                  (_, i) => i + 1
+                )
+              : [];
+
+          row.innerHTML = `
+                    <div class="col-span-full sm:col-span-2">
+                        <label for="book-${
+                          input.id
+                        }" class="block text-sm font-medium ${
+            theme.textControl
+          } mb-1">${t.book}</label>
+                        <select id="book-${input.id}" data-id="${
+            input.id
+          }" data-field="book" class="block w-full px-4 py-2 border ${
+            theme.borderSecondary
+          } rounded-md shadow-sm focus:ring-blue-700 focus:border-blue-700 sm:text-sm ${
+            theme.textInput
+          } ${theme.bgCard} appearance-none" ${
+            appState.isLoadingData ? "disabled" : ""
+          } required>
+                            <option value="">${t.selectBook}</option>
+                            ${(appState.currentAllBooks || [])
+                              .map(
+                                (bookName) =>
+                                  `<option value="${bookName}" ${
+                                    input.book === bookName ? "selected" : ""
+                                  }>${bookName}</option>`
+                              )
+                              .join("")}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="startChapter-${
+                          input.id
+                        }" class="block text-sm font-medium ${
+            theme.textControl
+          } mb-1">${t.startChapter}</label>
+                        <select id="startChapter-${input.id}" data-id="${
+            input.id
+          }" data-field="startChapter" class="block w-full px-4 py-2 border ${
+            theme.borderSecondary
+          } rounded-md shadow-sm focus:ring-blue-700 focus:border-blue-700 sm:text-sm ${
+            theme.textInput
+          } ${theme.bgCard} appearance-none" ${
+            !bookSelected || appState.isLoadingData ? "disabled" : ""
+          } required>
+                            <option value="">${t.selectChapter}</option>
+                            ${chaptersInBook
+                              .map(
+                                (chapterNum) =>
+                                  `<option value="${chapterNum}" ${
+                                    input.startChapter === String(chapterNum)
+                                      ? "selected"
+                                      : ""
+                                  }>${chapterNum}</option>`
+                              )
+                              .join("")}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="startVerse-${
+                          input.id
+                        }" class="block text-sm font-medium ${
+            theme.textControl
+          } mb-1">${t.startVerse}</label>
+                        <select id="startVerse-${input.id}" data-id="${
+            input.id
+          }" data-field="startVerse" class="block w-full px-4 py-2 border ${
+            theme.borderSecondary
+          } rounded-md shadow-sm focus:ring-blue-700 focus:border-blue-700 sm:text-sm ${
+            theme.textInput
+          } ${theme.bgCard} appearance-none" ${
+            !startChapterSelected || appState.isLoadingData ? "disabled" : ""
+          } required>
+                            <option value="">${t.selectVerse}</option>
+                            ${versesInStartChapter
+                              .map(
+                                (verseNum) =>
+                                  `<option value="${verseNum}" ${
+                                    input.startVerse === String(verseNum)
+                                      ? "selected"
+                                      : ""
+                                  }>${verseNum}</option>`
+                              )
+                              .join("")}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="endChapter-${
+                          input.id
+                        }" class="block text-sm font-medium ${
+            theme.textControl
+          } mb-1">${t.endChapter}</label>
+                        <select id="endChapter-${input.id}" data-id="${
+            input.id
+          }" data-field="endChapter" class="block w-full px-4 py-2 border ${
+            theme.borderSecondary
+          } rounded-md shadow-sm focus:ring-blue-700 focus:border-blue-700 sm:text-sm ${
+            theme.textInput
+          } ${theme.bgCard} appearance-none" ${
+            !bookSelected || appState.isLoadingData ? "disabled" : ""
+          }>
+                            <option value="">${t.selectChapter}</option>
+                            ${chaptersInBook
+                              .filter(
+                                (c) => c >= parseInt(input.startChapter || "1")
+                              )
+                              .map(
+                                (chapterNum) =>
+                                  `<option value="${chapterNum}" ${
+                                    parseInt(input.endChapter) === chapterNum
+                                      ? "selected"
+                                      : ""
+                                  }>${chapterNum}</option>`
+                              )
+                              .join("")}
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <div class="flex-grow">
+                            <label for="endVerse-${
+                              input.id
+                            }" class="block text-sm font-medium ${
+            theme.textControl
+          } mb-1">${t.endVerse}</label>
+                            <select id="endVerse-${input.id}" data-id="${
+            input.id
+          }" data-field="endVerse" class="block w-full px-4 py-2 border ${
+            theme.borderSecondary
+          } rounded-md shadow-sm focus:ring-blue-700 focus:border-blue-700 sm:text-sm ${
+            theme.textInput
+          } ${theme.bgCard} appearance-none" ${
+            !effectiveEndChapterForVerses || appState.isLoadingData
+              ? "disabled"
+              : ""
+          }>
+                                <option value="">${t.selectVerse}</option>
+                                ${(effectiveEndChapterForVerses ===
+                                parseInt(input.startChapter)
+                                  ? versesInEndChapter.filter(
+                                      (v) =>
+                                        v >= parseInt(input.startVerse || "1")
+                                    )
+                                  : versesInEndChapter
+                                )
+                                  .map(
+                                    (verseNum) =>
+                                      `<option value="${verseNum}" ${
+                                        input.endVerse === String(verseNum)
+                                          ? "selected"
+                                          : ""
+                                      }>${verseNum}</option>`
+                                  )
+                                  .join("")}
+                            </select>
+                        </div>
+                        ${
+                          appState.verseInputs.length > 1
+                            ? `
+                            <button type="button" data-id="${input.id}" class="ml-2 p-2 rounded-md transition ease-in-out duration-150 flex-shrink-0 remove-button ${theme.bgButtonRed} text-white" title="Remove Verse">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 11-2 0v6a1 1 0 112 0V8z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        `
+                            : ""
+                        }
+                    </div>
+                `;
+          container.appendChild(row);
+
+          // Attach event listeners for the newly created selects and buttons
+          row.querySelectorAll("select").forEach((select) => {
+            select.addEventListener("change", handleInputChange);
+            // Ensure custom arrow is applied immediately after creation
+            select.style.backgroundImage = `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3e%3cpath d='M7 8L10 12L13 8' stroke='${theme.dropdownArrowColor}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e")`;
+          });
+          const removeButton = row.querySelector(".remove-button");
+          if (removeButton) {
+            removeButton.addEventListener("click", handleRemoveVerseInput);
+          }
+        });
+        applyThemeClasses(); // Reapply theme for new rows, including dropdown arrows and text colors
+      }
+
+      function renderOutputArea() {
+        const t = getTranslations();
+        const theme = getCurrentThemeClasses();
+
+        DOMElements.outputTitle.textContent = `${t.yourVerses} (${appState.selectedVersion})`;
+        const verseContentDiv = DOMElements.verseContent;
+        verseContentDiv.innerHTML = ""; // Clear previous content
+
+        if (appState.fetchedVerses.length > 0) {
+          appState.fetchedVerses.forEach((group, index) => {
+            const p = document.createElement("p");
+            p.className = `mb-4`;
+
+            const strong = document.createElement("strong");
+            strong.className = theme.textStrong;
+            strong.textContent = `${group.book} ${group.chapter}:${
+              group.startVerse
+            }${
+              group.startVerse !== group.endVerse ? `-${group.endVerse}` : ""
+            }: `;
+            p.appendChild(strong);
+
+            const span = document.createElement("span");
+            span.className = "font-roboto-regular";
+            group.texts.forEach((text, textIndex) => {
+              const actualText = text; // Assuming JSON text is clean
+              if (textIndex > 0) {
+                span.textContent += " "; // Add space between consecutive verses if they were originally separate
+              }
+              span.textContent += actualText.trim();
+            });
+            p.appendChild(span);
+            verseContentDiv.appendChild(p);
+          });
+          DOMElements.outputArea.classList.remove("hidden"); // Show output area
+        } else {
+          DOMElements.outputArea.classList.add("hidden"); // Hide output area
+        }
+      }
+
+      function renderErrorMessage() {
+        const errorMessageDiv = DOMElements.errorMessage;
+        const theme = getCurrentThemeClasses();
+        if (appState.errorMessage) {
+          errorMessageDiv.textContent = appState.errorMessage;
+          errorMessageDiv.classList.remove("hidden");
+          errorMessageDiv.className = `px-4 py-3 rounded-md relative text-sm ${theme.bgError}`;
+        } else {
+          errorMessageDiv.classList.add("hidden");
+          errorMessageDiv.textContent = "";
+        }
+      }
+
+      function renderNotificationModal() {
+        const modalOverlay = DOMElements.notificationModalOverlay;
+        const modalContent = DOMElements.notificationModalContent;
+        const modalTitle = DOMElements.notificationModalTitle;
+        const modalMessage = DOMElements.notificationModalMessage;
+        const modalCloseButton = DOMElements.notificationModalCloseButton;
+        const t = getTranslations();
+        const theme = getCurrentThemeClasses();
+
+        if (appState.isNotificationModalOpen) {
+          modalTitle.textContent = t.notification;
+          modalMessage.textContent = appState.notificationModalMessage;
+          modalCloseButton.textContent = t.close;
+
+          modalContent.className = `relative p-6 rounded-lg shadow-xl max-w-sm w-full border-t-4 ${theme.bgCard} ${theme.ringButtonPrimary}`;
+          modalTitle.className = `text-lg font-bold ${theme.textHeading} mb-4`;
+          modalMessage.className = `${theme.textMain} mb-6`;
+          modalCloseButton.className = `w-full py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-150 ${theme.bgButtonPrimary} text-white`;
+
+          modalOverlay.classList.remove("hidden");
+        } else {
+          modalOverlay.classList.add("hidden");
+        }
+      }
+
+      // --- Event Handlers ---
+
+      function handleLanguageChange(event) {
+        appState.selectedLanguage = event.target.id === "lang-en" ? "en" : "es";
+        renderAll(); // Re-render everything to update UI text
+      }
+
+      function handleThemeChange(event) {
+        appState.theme = event.target.id.replace("theme-", "");
+        renderAll(); // Re-render everything to apply new theme classes
+      }
+
+      async function handleVersionSelectChange(event) {
+        // Make it async
+        appState.selectedVersion = event.target.value;
+        appState.verseInputs = [
+          {
+            id: 1,
+            book: "",
+            startChapter: "",
+            startVerse: "",
+            endChapter: "",
+            endVerse: "",
+          },
+        ]; // Reset inputs
+        appState.errorMessage = "";
+        appState.fetchedVerses = []; // Clear fetched verses when version changes
+
+        const loadSuccess = await loadBibleVersionData(
+          appState.selectedVersion
+        );
+        // appState.selectedLanguage is set within loadBibleVersionData on success
+
+        // renderAll() is called within loadBibleVersionData's finally block.
+      }
+
+      function handleInputChange(event) {
+        const target = event.target;
+        const id = parseInt(target.dataset.id);
+        const field = target.dataset.field;
+        const value = target.value;
+
+        const inputIndex = appState.verseInputs.findIndex(
+          (input) => input.id === id
+        );
+        if (inputIndex > -1) {
+          const updatedInputs = [...appState.verseInputs];
+          let updatedInput = { ...updatedInputs[inputIndex], [field]: value };
+
+          const currentBookChapterCounts = appState.currentBookChapterCounts; // Already loaded
+          const currentBookData = appState.currentBibleData
+            ? appState.currentBibleData[updatedInput.book]
+            : null;
+
+          // Reset dependent fields when a parent field changes
+          if (field === "book") {
+            updatedInput.startChapter = "";
+            updatedInput.startVerse = "";
+            updatedInput.endChapter = "";
+            updatedInput.endVerse = "";
+          } else if (field === "startChapter") {
+            updatedInput.startVerse = "";
+            updatedInput.endChapter = "";
+            updatedInput.endVerse = "";
+          } else if (field === "endChapter") {
+            updatedInput.endVerse = "";
+          }
+
+          // Validate chapter/verse selection based on max available for selected book/chapter
+          if (
+            updatedInput.book &&
+            (field === "startChapter" || field === "endChapter")
+          ) {
+            const chapterNum = parseInt(updatedInput[field]);
+            const maxChapters = currentBookChapterCounts
+              ? currentBookChapterCounts[updatedInput.book]
+              : 0;
+            if (chapterNum > maxChapters && maxChapters > 0) {
+              updatedInput[field] = ""; // Clear if out of bounds
+            }
+          }
+
+          if (
+            updatedInput.book &&
+            updatedInput.startChapter &&
+            (field === "startVerse" || field === "endVerse")
+          ) {
+            const chapterToValidate =
+              field === "startVerse"
+                ? updatedInput.startChapter
+                : updatedInput.endChapter || updatedInput.startChapter;
+            const chapterData =
+              currentBookData && currentBookData.chapters
+                ? currentBookData.chapters.find(
+                    (c) => c.chapter === parseInt(chapterToValidate)
+                  )
+                : null;
+            const maxVerses = chapterData ? chapterData.verses.length : 0;
+            const verseNum = parseInt(updatedInput[field]);
+
+            if (verseNum > maxVerses && maxVerses > 0) {
+              updatedInput[field] = ""; // Clear if out of bounds
+            }
+          }
+
+          updatedInputs[inputIndex] = updatedInput;
+          appState.verseInputs = updatedInputs;
+        }
+        renderVerseInputRows();
+        renderErrorMessage(); // Clear error message on input change
+      }
+
+      function handleAddVerseInput() {
+        const newId =
+          appState.verseInputs.length > 0
+            ? Math.max(...appState.verseInputs.map((i) => i.id)) + 1
+            : 1;
+        appState.verseInputs.push({
+          id: newId,
+          book: "",
+          startChapter: "",
+          startVerse: "",
+          endChapter: "",
+          endVerse: "",
+        });
+        appState.errorMessage = "";
+        renderVerseInputRows();
+      }
+
+      function handleRemoveVerseInput(event) {
+        const idToRemove = parseInt(event.currentTarget.dataset.id);
+        appState.verseInputs = appState.verseInputs.filter(
+          (input) => input.id !== idToRemove
+        );
+        appState.errorMessage = "";
+        // appState.fetchedVerses is NOT cleared here, it persists
+        renderVerseInputRows();
+        renderOutputArea(); // Update output visibility based on persisted fetchedVerses
+      }
+
+      function handleSubmit(event) {
+        event.preventDefault();
+        appState.errorMessage = "";
+
+        if (appState.isLoadingData || !appState.currentBibleData) {
+          appState.errorMessage =
+            "Bible data is not loaded or is currently loading. Please wait.";
+          renderErrorMessage();
+          return;
+        }
+        appState.fetchedVerses = []; // CLEAR previous results ONLY on new submission
+
+        let allVerses = [];
+        let hasError = false;
+        const t = getTranslations();
+
+        for (const input of appState.verseInputs) {
+          const validationError = validateVerseInput(input);
+          if (validationError) {
+            appState.errorMessage = validationError;
+            hasError = true;
+            break;
+          }
+          allVerses = allVerses.concat(getVerses(input));
+        }
+
+        if (hasError) {
+          renderErrorMessage();
+          appState.fetchedVerses = []; // Clear any partial results on validation error
+          renderOutputArea();
+          return;
+        }
+
+        allVerses.sort((a, b) => {
+          const bookAIndex = appState.currentAllBooks.indexOf(a.book);
+          const bookBIndex = appState.currentAllBooks.indexOf(b.book);
+          if (bookAIndex !== bookBIndex) return bookAIndex - bookBIndex;
+          if (a.chapter !== b.chapter) return a.chapter - b.chapter;
+          return a.verse - b.verse;
+        });
+
+        appState.fetchedVerses = groupConsecutiveVerses(allVerses);
+        renderOutputArea();
+      }
+
+      function handleCopyToClipboard() {
+        const outputRef = document.getElementById("verse-content"); // Get reference by ID
+        if (outputRef) {
+          const range = document.createRange();
+          range.selectNodeContents(outputRef);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+          try {
+            const successful = document.execCommand("copy");
+            if (successful) {
+              showNotificationModal(getTranslations().contentCopied);
+            } else {
+              showNotificationModal(getTranslations().copyFailed);
+            }
+          } catch (err) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard
+                .writeText(outputRef.innerText)
+                .then(() =>
+                  showNotificationModal(getTranslations().contentCopied)
+                )
+                .catch(() =>
+                  showNotificationModal(getTranslations().copyFailed)
+                );
+            } else {
+              showNotificationModal(getTranslations().copyFailed);
+            }
+          }
+          selection.removeAllRanges();
+        }
+      }
+
+      // --- Initialization and Full Render ---
+
+      function getDOMElements() {
+        DOMElements.appContainer = document.getElementById("app-container");
+        DOMElements.appHeader = document.getElementById("app-header");
+        DOMElements.appTitle = document.getElementById("app-title");
+
+        DOMElements.langEnButton = document.getElementById("lang-en");
+        DOMElements.langEsButton = document.getElementById("lang-es");
+        DOMElements.themeLightButton = document.getElementById("theme-light");
+        DOMElements.themeSepiaButton = document.getElementById("theme-sepia");
+        DOMElements.themeDarkButton = document.getElementById("theme-dark");
+
+        DOMElements.versionSelectionArea = document.getElementById(
+          "version-selection-area"
+        );
+        DOMElements.labelSelectVersion = document.getElementById(
+          "label-select-version"
+        );
+        DOMElements.bibleVersionSelect = document.getElementById(
+          "bible-version-select"
+        );
+
+        DOMElements.verseInputsContainer = document.getElementById(
+          "verse-inputs-container"
+        );
+        DOMElements.addButton = document.getElementById("add-verse-input");
+        DOMElements.addButtonText = document.getElementById(
+          "text-add-more-verses"
+        );
+        DOMElements.generateButton =
+          document.getElementById("generate-document");
+        DOMElements.generateButtonText = document.getElementById(
+          "text-generate-document"
+        );
+
+        DOMElements.errorMessage = document.getElementById("error-message");
+        DOMElements.outputArea = document.getElementById("output-area");
+        DOMElements.outputTitle = document.getElementById("output-title");
+        DOMElements.verseContent = document.getElementById("verse-content");
+        DOMElements.copyButton = document.getElementById("copy-to-clipboard");
+        DOMElements.copyButtonText = document.getElementById(
+          "text-copy-to-clipboard"
+        );
+
+        DOMElements.notificationModalOverlay = document.getElementById(
+          "notification-modal-overlay"
+        );
+        DOMElements.notificationModalContent = document.getElementById(
+          "notification-modal-content"
+        );
+        DOMElements.notificationModalTitle = document.getElementById(
+          "notification-modal-title"
+        );
+        DOMElements.notificationModalMessage = document.getElementById(
+          "notification-modal-message"
+        );
+        DOMElements.notificationModalCloseButton = document.getElementById(
+          "notification-modal-close"
+        );
+      }
+
+      function attachEventListeners() {
+        DOMElements.langEnButton.addEventListener(
+          "click",
+          handleLanguageChange
+        );
+        DOMElements.langEsButton.addEventListener(
+          "click",
+          handleLanguageChange
+        );
+        DOMElements.themeLightButton.addEventListener(
+          "click",
+          handleThemeChange
+        );
+        DOMElements.themeSepiaButton.addEventListener(
+          "click",
+          handleThemeChange
+        );
+        DOMElements.themeDarkButton.addEventListener(
+          "click",
+          handleThemeChange
+        );
+        DOMElements.bibleVersionSelect.addEventListener(
+          "change",
+          handleVersionSelectChange
+        );
+        DOMElements.addButton.addEventListener("click", handleAddVerseInput);
+        DOMElements.verseInputForm.addEventListener("submit", handleSubmit);
+        DOMElements.copyButton.addEventListener("click", handleCopyToClipboard);
+        DOMElements.notificationModalCloseButton.addEventListener(
+          "click",
+          closeNotificationModal
+        );
+      }
+
+      function renderAll() {
+        // This function orchestrates the full UI update based on current appState
+        renderAppTitleAndToggles();
+        renderVersionSelect();
+        renderVerseInputRows();
+        renderErrorMessage();
+        renderOutputArea();
+        renderNotificationModal();
+        applyThemeClasses(); // Ensure all elements get their correct theme classes
+      }
+
+      // Initial setup on page load
+      window.onload = async function () {
+        // Make it async
+        getDOMElements(); // Cache DOM elements once
+        DOMElements.verseInputForm =
+          document.getElementById("verse-input-form"); // Form ref for event listener
+        attachEventListeners(); // Attach all global event listeners
+
+        const versionKeys = Object.keys(allBibleVersions);
+        appState.selectedVersion = versionKeys.includes("King James Version")
+          ? "King James Version"
+          : versionKeys.length > 0
+          ? versionKeys[0]
+          : null;
+
+        if (appState.selectedVersion) {
+          await loadBibleVersionData(appState.selectedVersion); // Wait for initial load
+          // appState.selectedLanguage is set inside loadBibleVersionData
+        } else {
+          showNotificationModal("No Bible versions are configured.");
+          // Handle UI state if no versions are available
+        }
+        // renderAll() is called within loadBibleVersionData's finally block (or directly if no version selected).
+        if (!appState.selectedVersion) renderAll();
+      };
+    </script>
+  </body>
+</html>
