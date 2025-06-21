@@ -273,6 +273,24 @@
           </svg>
           <span id="text-copy-to-clipboard"></span>
         </button>
+        <button
+          id="print-verses"
+          class="mt-6 w-full flex items-center justify-center px-6 py-3 rounded-md transition ease-in-out duration-150 font-semibold shadow-md"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 mr-2"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5 4v3H4a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm2 0h6v3H7V4zm0 8.293V10H5v2.293A1 1 0 005.707 13H14.293A1 1 0 0015 12.293V10h-2v2.293A1 1 0 0012.293 13H7.707A1 1 0 007 12.293zM7 11h6v-1H7v1z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span id="text-print-verses"></span>
+        </button>
       </div>
     </div>
 
@@ -318,6 +336,7 @@
           generateDocument: "Generate Document",
           yourVerses: "Your Verses",
           copyToClipboard: "Copy Verses to Clipboard",
+          printVerses: "Print Verses",
           notification: "Notification",
           close: "Close",
           settings: "Settings",
@@ -342,6 +361,7 @@
             "End Verse cannot be less than Start Verse within the same chapter.",
           contentCopied: "Content copied to clipboard!",
           copyFailed: "Failed to copy. Please try again manually.",
+          errorNoVersesToPrint: "There are no verses to print.",
         },
         es: {
           appTitle: "Bible Dimensions en Español",
@@ -365,6 +385,7 @@
           generateDocument: "Generar Documento",
           yourVerses: "Tus Versículos",
           copyToClipboard: "Copiar Versículos al Portapapeles",
+          printVerses: "Imprimir Versículos",
           notification: "Notificación",
           close: "Cerrar",
           settings: "Ajustes",
@@ -389,6 +410,7 @@
             "El Versículo Final no puede ser menor que el Versículo de Inicio dentro del mismo capítulo.",
           contentCopied: "¡Contenido copiado al portapapeles!",
           copyFailed: "No se pudo copiar. Inténtelo de nuevo manualmente.",
+          errorNoVersesToPrint: "No hay versículos para imprimir.",
         },
       };
 
@@ -885,6 +907,8 @@
         DOMElements.addButton.className = `flex items-center px-4 py-2 rounded-md transition ease-in-out duration-150 ${theme.bgButtonGreen} text-white`;
         DOMElements.generateButton.className = `flex items-center px-6 py-2 rounded-md transition ease-in-out duration-150 font-semibold ${theme.bgButtonPrimary} text-white`;
         DOMElements.copyButton.className = `mt-6 w-full flex items-center justify-center px-6 py-3 rounded-md transition ease-in-out duration-150 font-semibold shadow-md ${theme.bgButtonSecondary} text-white`;
+        DOMElements.printButton.className = `mt-6 w-full flex items-center justify-center px-6 py-3 rounded-md transition ease-in-out duration-150 font-semibold shadow-md ${theme.bgButtonSecondary} text-white`;
+
 
         // Apply theme to specific elements within the form rows
         document.querySelectorAll(".verse-input-row").forEach((row) => {
@@ -949,6 +973,8 @@
         DOMElements.addButtonText.textContent = t.addMoreVerses;
         DOMElements.generateButtonText.textContent = t.generateDocument;
         DOMElements.copyButtonText.textContent = t.copyToClipboard;
+        DOMElements.printButtonText.textContent = t.printVerses;
+
 
         // Update active states for language buttons
         const theme = getCurrentThemeClasses();
@@ -1549,6 +1575,33 @@
         }
       }
 
+      function handlePrintVerses() {
+        const verseContentDiv = DOMElements.verseContent;
+        if (!verseContentDiv || !appState.fetchedVerses || appState.fetchedVerses.length === 0) {
+          showNotificationModal(getTranslations().errorNoVersesToPrint || "No verses to print."); // Fallback message
+          return;
+        }
+
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write('<html><head><title>Print Verses</title>');
+        // Basic styling for printing
+        printWindow.document.write(`
+          <style>
+            body { font-family: sans-serif; margin: 20px; }
+            p { margin-bottom: 1em; }
+            strong { font-weight: bold; }
+          </style>
+        `);
+        printWindow.document.write('</head><body>');
+        printWindow.document.write('<h1>' + (getTranslations().yourVerses || 'Your Verses') + '</h1>');
+        printWindow.document.write(verseContentDiv.innerHTML); // Use innerHTML to preserve formatting
+        printWindow.document.write('</body></html>');
+        printWindow.document.close(); // Important for some browsers
+        printWindow.focus(); // For IE
+        printWindow.print();
+        // printWindow.close(); // Optional: close the window after printing
+      }
+
       // --- Initialization and Full Render ---
 
       function getDOMElements() {
@@ -1592,6 +1645,10 @@
         DOMElements.copyButton = document.getElementById("copy-to-clipboard");
         DOMElements.copyButtonText = document.getElementById(
           "text-copy-to-clipboard"
+        );
+        DOMElements.printButton = document.getElementById("print-verses");
+        DOMElements.printButtonText = document.getElementById(
+          "text-print-verses"
         );
 
         DOMElements.notificationModalOverlay = document.getElementById(
@@ -1639,6 +1696,7 @@
         DOMElements.addButton.addEventListener("click", handleAddVerseInput);
         DOMElements.verseInputForm.addEventListener("submit", handleSubmit);
         DOMElements.copyButton.addEventListener("click", handleCopyToClipboard);
+        DOMElements.printButton.addEventListener("click", handlePrintVerses);
         DOMElements.notificationModalCloseButton.addEventListener(
           "click",
           closeNotificationModal
